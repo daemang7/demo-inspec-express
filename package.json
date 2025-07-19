@@ -1,4 +1,6 @@
 {
+  "name": "demo-inspec-express",
+  "version": "1.0.0",
   "scripts": {
     "start": "node dist/server/index.js",
     "dev": "vite",
