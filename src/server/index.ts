@@ -90,7 +90,7 @@ if (process.env.NODE_ENV !== "production") {
     // Other ports are firewalled. Default to 10000 if not specified.
     // this serves both the API and the client.
     // It is the only port that is not firewalled.
-    const port = parseInt(process.env.PORT || "3000", 10);
+    const port = parseInt(process.env.PORT || "3010", 10);
     server.listen(port, "0.0.0.0", () => {
       log(`serving on port ${port}`);
     });
