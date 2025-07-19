@@ -1,10 +1,11 @@
 {
+  "type": "module",
   "scripts": {
     "start": "node dist/server/index.js",
     "dev": "vite",
     "dev:server": "tsx src/server/index.ts",
     "build": "vite build",
-    "build:server": "tsc src/server/index.ts --outDir dist/server --target es2020 --module commonjs --esModuleInterop",
+    "build:server": "npx tsc src/server/index.ts --outDir dist/server --target es2020 --module commonjs --esModuleInterop --skipLibCheck --moduleResolution node",
     "vercel-build": "npm run build && npm run build:server",
     "render-build": "npm run build && npm run build:server"
   },

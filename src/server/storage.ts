@@ -1,4 +1,4 @@
-import { users, inspections, type User, type InsertUser, type Inspection, type InsertInspection } from "./schema";
+import { users, inspections, type User, type InsertUser, type Inspection, type InsertInspection } from "./schema.js";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -45,7 +45,11 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
+    const user: User = {
+      id,
+      username: insertUser.username,
+      password: insertUser.password,
+    };
     this.users.set(id, user);
     return user;
   }
@@ -80,12 +84,16 @@ export class MemStorage implements IStorage {
   async createInspection(insertInspection: InsertInspection): Promise<Inspection> {
     const id = this.currentInspectionId++;
     const inspection: Inspection = {
-      ...insertInspection,
       id,
-      createdAt: new Date(),
+      inspectedBy: insertInspection.inspectedBy,
+      date: insertInspection.date,
+      extinguisherId: insertInspection.extinguisherId,
+      location: insertInspection.location,
+      condition: insertInspection.condition,
       pressure: insertInspection.pressure ?? null,
       description: insertInspection.description ?? null,
       photoUrl: insertInspection.photoUrl ?? null,
+      createdAt: new Date(),
     };
     this.inspections.set(id, inspection);
     return inspection;
