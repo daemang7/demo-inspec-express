@@ -1,4 +1,4 @@
-import { users, inspections, type User, type InsertUser, type Inspection, type InsertInspection } from "./schema.js";
+import { users, inspections, type User, type InsertUser, type Inspection, type InsertInspection } from "./schema";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
