@@ -171,6 +171,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Clear all data
+  app.delete("/api/clear-all", async (req, res) => {
+    try {
+      console.log("Clear all data endpoint called");
+      await storage.clearAllData();
+      console.log("Clear all data completed successfully");
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error clearing all data:", error);
+      res.status(500).json({ message: "Failed to clear all data" });
+    }
+  });
+
   // ===== UTILITY ENDPOINTS =====
 
   // Health check

@@ -5,7 +5,9 @@ function App() {
   const [apiInfo, setApiInfo] = useState<any>(null);
   const [inspections, setInspections] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingInspections, setLoadingInspections] = useState(false);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [loadingClear, setLoadingClear] = useState(false);
 
   const fetchApiInfo = async () => {
     try {
@@ -18,7 +20,7 @@ function App() {
   };
 
   const fetchInspections = async () => {
-    setLoading(true);
+    setLoadingInspections(true);
     try {
       const response = await fetch("/api/inspections");
       const data = await response.json();
@@ -26,12 +28,12 @@ function App() {
     } catch (error) {
       console.error("Error fetching inspections:", error);
     } finally {
-      setLoading(false);
+      setLoadingInspections(false);
     }
   };
 
   const fetchUsers = async () => {
-    setLoading(true);
+    setLoadingUsers(true);
     try {
       const response = await fetch("/api/users");
       const data = await response.json();
@@ -39,7 +41,7 @@ function App() {
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
-      setLoading(false);
+      setLoadingUsers(false);
     }
   };
 
@@ -100,6 +102,38 @@ function App() {
     }
   };
 
+  const clearAllData = async () => {
+    // if (!confirm("Are you sure you want to delete all data? This action is irreversible.")) {
+    //   return;
+    // }
+
+    setLoadingClear(true);
+    try {
+      console.log("Sending clear all data request...");
+      const response = await fetch("/api/clear-all", {
+        method: "DELETE",
+      });
+
+      console.log("Clear response status:", response.status);
+
+      if (response.ok) {
+        console.log("Data cleared successfully on server");
+        alert("All data has been successfully deleted!");
+        setInspections([]);
+        setUsers([]);
+      } else {
+        const errorText = await response.text();
+        console.error("Failed to clear data:", errorText);
+        alert("Failed to delete data.");
+      }
+    } catch (error) {
+      console.error("Error clearing data:", error);
+      alert("An error occurred while deleting data.");
+    } finally {
+      setLoadingClear(false);
+    }
+  };
+
   useEffect(() => {
     fetchApiInfo();
   }, []);
@@ -146,7 +180,7 @@ function App() {
             cursor: "pointer",
           }}
         >
-          {loading ? "Loading..." : "Fetch Inspections"}
+          {loadingInspections ? "Loading..." : "Fetch Inspections"}
         </button>
 
         <button
@@ -160,7 +194,7 @@ function App() {
             cursor: "pointer",
           }}
         >
-          {loading ? "Loading..." : "Fetch Users"}
+          {loadingUsers ? "Loading..." : "Fetch Users"}
         </button>
 
         <button
@@ -189,6 +223,20 @@ function App() {
           }}
         >
           Create Sample User
+        </button>
+
+        <button
+          onClick={clearAllData}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#6c757d",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          {loadingClear ? "Initializing..." : "Reset all data"}
         </button>
       </div>
 

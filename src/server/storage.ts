@@ -20,6 +20,8 @@ export interface IStorage {
     byCondition: Record<string, number>;
     byInspector: Record<string, number>;
   }>;
+
+  clearAllData(): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -143,6 +145,19 @@ export class MemStorage implements IStorage {
       byCondition,
       byInspector,
     };
+  }
+
+  async clearAllData(): Promise<void> {
+    console.log("Clearing all data...");
+    console.log("Before clear - Users:", this.users.size, "Inspections:", this.inspections.size);
+
+    this.users.clear();
+    this.inspections.clear();
+    this.currentUserId = 1;
+    this.currentInspectionId = 1;
+
+    console.log("After clear - Users:", this.users.size, "Inspections:", this.inspections.size);
+    console.log("Data cleared successfully");
   }
 }
 
