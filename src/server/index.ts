@@ -3,6 +3,16 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+const cors = require("cors");
+// CORS 미들웨어 추가
+app.use(
+  cors({
+    origin: "*", // 모든 도메인 허용 (개발용)
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept", "Origin"],
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
