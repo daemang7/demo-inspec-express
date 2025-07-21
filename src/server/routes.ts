@@ -35,6 +35,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/inspections", async (req, res) => {
     try {
       const validatedData = insertInspectionSchema.parse(req.body);
+      const isDuplicate = await storage.existsDuplicateInspection(validatedData);
+      if (isDuplicate) {
+        return res.status(409).json({ message: "Duplicate inspection exists." });
+      }
       const inspection = await storage.createInspection(validatedData);
       res.status(201).json(inspection);
     } catch (error) {

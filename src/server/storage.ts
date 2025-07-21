@@ -20,6 +20,7 @@ export interface IStorage {
     byCondition: Record<string, number>;
     byInspector: Record<string, number>;
   }>;
+  existsDuplicateInspection(inspection: InsertInspection): Promise<boolean>;
 
   clearAllData(): Promise<void>;
 }
@@ -145,6 +146,16 @@ export class MemStorage implements IStorage {
       byCondition,
       byInspector,
     };
+  }
+
+  async existsDuplicateInspection(inspection: InsertInspection): Promise<boolean> {
+    return Array.from(this.inspections.values()).some(
+      (item) =>
+        item.inspectedBy === inspection.inspectedBy &&
+        item.date === inspection.date &&
+        item.extinguisherId === inspection.extinguisherId &&
+        item.location === inspection.location
+    );
   }
 
   async clearAllData(): Promise<void> {
